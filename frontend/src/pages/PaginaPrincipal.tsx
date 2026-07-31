@@ -16,23 +16,106 @@ const NAV_ITEMS = [
 const SERVICES = [
   {
     num: "01",
-    title: "Fio a Fio",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Classic",
     desc: "Aplicação clássica, um fio sintético por cílio natural, para um efeito natural e alongado.",
-    price: "a partir de R$ 120",
+    price: "a partir de R$ 197,00",
     image: "https://picsum.photos/seed/lash-fio-a-fio/700/900",
   },
   {
     num: "02",
-    title: "Volume Russo",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Elite",
     desc: "Leques de fios ultrafinos aplicados por cílio, criando densidade e um olhar marcante.",
-    price: "a partir de R$ 180",
+    price: "a partir de R$ 227,00",
     image: "https://picsum.photos/seed/lash-volume-russo/700/900",
   },
   {
     num: "03",
-    title: "Lash Lifting",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Plume",
     desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 90",
+    price: "a partir de R$ 247,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "04",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Luxo",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 267,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "05",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Fantasy",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 280,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "06",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Supreme",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 287,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "07",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Californiano",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 257,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "08",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Cisne Negro",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 357,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "09",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Hyper Fox",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 297,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "10",
+    tipo: "Hyper Fio a Fio",
+    title: "Hyper Eyeliner",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 287,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "11",
+    tipo: "Sobrancelhas",
+    title: "Designer com Tintura",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 80,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "12",
+    tipo: "Sobrancelhas",
+    title: "Designer de sobrancelhas",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 50,00",
+    image: "https://picsum.photos/seed/lash-lifting/700/900",
+  },
+  {
+    num: "13",
+    tipo: "Outros",
+    title: "Remoçaõ de Cílios",
+    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
+    price: "a partir de R$ 70,00",
     image: "https://picsum.photos/seed/lash-lifting/700/900",
   },
 ];
@@ -163,6 +246,13 @@ export default function LashDesignSite() {
             ))}
           </ul>
         </nav>
+        {menuOpen && (
+          <div
+            className="nav-overlay"
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
       </header>
 
       <section style={styles.hero}>
@@ -268,6 +358,7 @@ export default function LashDesignSite() {
             }}
           >
             <span style={styles.serviceNum}>{SERVICES[serviceIndex].num}</span>
+            <h4 style={styles.tipo}>Tipo: {SERVICES[serviceIndex].tipo}</h4>
             <h3 style={styles.h3}>{SERVICES[serviceIndex].title}</h3>
             <p style={styles.serviceDesc}>{SERVICES[serviceIndex].desc}</p>
             <div style={styles.price}>{SERVICES[serviceIndex].price}</div>
@@ -533,9 +624,16 @@ const css = `
       transform:translateX(100%);
       transition:transform .35s ease;
       padding:6rem 2rem 2rem;
+      z-index: 55;
     }
     .main-nav.open{
       transform:translateX(0);
+    }
+    .nav-overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,0.5);
+      z-index: 54;
     }
     .main-nav .nav-list{
       flex-direction:column !important;
@@ -741,12 +839,17 @@ const styles: { [key: string]: CSSProperties } = {
   h3: {
     fontFamily: "'Cormorant Garamond', serif",
     fontWeight: 500,
-    fontSize: "1.5rem",
+    fontSize: "clamp(12px, 5vw, 2rem)",
     marginBottom: "0.8rem",
+  },
+  tipo: {
+    fontFamily: "'Cormorant Garamond', serif",
+    fontWeight: 400,
+    fontSize: "clamp(10px, 4vw, 1.2rem)",
   },
   serviceDesc: {
     color: "var(--muted)",
-    fontSize: "0.9rem",
+    fontSize: "clamp(8px, 12px, 24px)",
     lineHeight: 1.7,
     marginBottom: "1.2rem",
   },
