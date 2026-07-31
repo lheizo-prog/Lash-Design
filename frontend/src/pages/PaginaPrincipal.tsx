@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { CSSProperties } from "react";
 
 // troque pelo seu número real: 55 + DDD + número, sem espaços/traços
-const WHATSAPP_LINK = "https://wa.me/5500000000000";
+const WHATSAPP_LINK = "https://wa.me/5513996844270";
 
 const NAV_ITEMS = [
   { id: "sobre", label: "Sobre" },
@@ -216,7 +216,8 @@ export default function LashDesignSite() {
 
       <header style={styles.header}>
         <div style={styles.logo}>
-          Cílios <span style={{ color: "var(--gold)" }}>&amp;</span> Cia
+          Luciana <span style={{ color: "var(--gold)" }}>&amp;</span>{" "}
+          Lash-Designer
         </div>
 
         <button
@@ -256,15 +257,18 @@ export default function LashDesignSite() {
       </header>
 
       <section style={styles.hero}>
-        <div style={styles.eyebrow}>Lash Design Studio</div>
+        <div style={styles.eyebrow}>Studio Hikari</div>
         <h1 style={styles.h1}>
           Olhares que <em style={{ color: "var(--gold-soft)" }}>contam</em>
           <br />
           uma história
         </h1>
         <p style={styles.heroText}>
-          Extensão de cílios fio a fio, volume russo e lash lifting, feitos à
-          mão com técnica e delicadeza — para um olhar que é só seu.
+          Extensão de cílios{" "}
+          <strong style={{ color: "var(--ivory)", fontWeight: 400 }}>
+            Hyper Fio a Fio
+          </strong>{" "}
+          , feitos à mão com técnica e delicadeza — para um olhar que é só seu.
         </p>
         <div style={styles.ctaRow}>
           <a href="#contato" style={{ ...styles.btn, ...styles.btnSolid }}>
@@ -324,10 +328,17 @@ export default function LashDesignSite() {
           <p style={styles.aboutP}>
             Mais de{" "}
             <strong style={{ color: "var(--ivory)", fontWeight: 400 }}>
-              7 anos
+              2 anos
             </strong>{" "}
-            dedicados exclusivamente à lash design, com mais de 2.000 olhares
+            dedicados exclusivamente à lash design, com diversos olhares
             transformados.
+          </p>
+          <p style={styles.aboutP}>
+            {" "}
+            <strong style={{ color: "var(--ivory)", fontWeight: 400 }}>
+              Certificados Internacionais
+            </strong>{" "}
+            dedicados exclusivamente ao lash design.
           </p>
         </div>
       </section>
@@ -496,7 +507,7 @@ export default function LashDesignSite() {
           Falar no WhatsApp
         </a>
         <div style={styles.footerMeta}>
-          <span>Cílios &amp; Cia — Lash Design</span>
+          <span>Luciana | Lash-Designer</span>
           <span>Seg-Sáb · 9h às 19h</span>
           <span>&copy; 2026</span>
         </div>
@@ -723,10 +734,11 @@ const styles: { [key: string]: CSSProperties } = {
     padding: "0 6vw",
   },
   eyebrow: {
-    fontSize: "0.72rem",
+    fontSize: "0.86rem",
     letterSpacing: "0.35em",
     textTransform: "uppercase",
     color: "var(--gold)",
+    marginTop: "1rem",
     marginBottom: "1.6rem",
   },
   h1: {
