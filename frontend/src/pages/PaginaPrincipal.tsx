@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import type { CSSProperties } from "react";
 
 // troque pelo seu número real: 55 + DDD + número, sem espaços/traços
 const WHATSAPP_LINK = "https://wa.me/5500000000000";
@@ -75,16 +76,22 @@ const FAQ_ITEMS = [
 
 export default function LashDesignSite() {
   // guarda qual item do menu está "brilhando" no momento
-  const [glowingId, setGlowingId] = useState(null);
+  const [glowingId, setGlowingId] = useState<string | null>(null);
   // controla se o menu hambúrguer está aberto no mobile
   const [menuOpen, setMenuOpen] = useState(false);
   // guarda qual pergunta do FAQ está aberta (null = nenhuma)
-  const [openFaq, setOpenFaq] = useState(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   // índice atual dos carrosséis de serviços e depoimentos
   const [serviceIndex, setServiceIndex] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   // guarda qual serviço está aberto no popup (null = fechado)
-  const [openService, setOpenService] = useState(null);
+  const [openService, setOpenService] = useState<{
+    num: string;
+    title: string;
+    desc: string;
+    price: string;
+    image: string;
+  } | null>(null);
 
   function nextService() {
     setServiceIndex((i) => (i + 1) % SERVICES.length);
@@ -113,7 +120,7 @@ export default function LashDesignSite() {
     return () => clearInterval(timer);
   }, [testimonialIndex]);
 
-  function handleNavClick(id) {
+  function handleNavClick(id: string) {
     // reinicia a animação mesmo se o mesmo item for clicado de novo
     setGlowingId(null);
     requestAnimationFrame(() => setGlowingId(id));
@@ -569,7 +576,7 @@ const css = `
 `;
 
 // estilos inline reaproveitando as variáveis CSS definidas acima
-const styles = {
+const styles: { [key: string]: CSSProperties } = {
   body: {
     background: "var(--ink)",
     color: "var(--ivory)",

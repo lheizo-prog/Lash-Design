@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import type { CSSProperties } from "react";
 
 // troque pelo seu número real: 55 + DDD + número, sem espaços/traços
 const WHATSAPP_LINK = "https://wa.me/5500000000000";
@@ -110,7 +111,7 @@ export default function QuizPage() {
   const [scores, setScores] = useState([0, 0, 0]);
   const [finished, setFinished] = useState(false);
 
-  function handleAnswer(points) {
+  function handleAnswer(points: number[]) {
     const newScores = scores.map((s, i) => s + points[i]);
     setScores(newScores);
 
@@ -235,7 +236,7 @@ const css = `
   }
 `;
 
-const styles = {
+const styles: { [key: string]: CSSProperties } = {
   body: {
     minHeight: "100vh",
     background: "var(--ink)",
