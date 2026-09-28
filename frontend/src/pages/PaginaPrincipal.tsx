@@ -471,6 +471,17 @@ const css = `
     --line: rgba(200,162,77,0.35);
   }
 
+  /* reset global — sem isso o navegador aplica margem padrão no body,
+     o que cria os "cantos brancos" nas bordas da tela */
+  *{ box-sizing: border-box; }
+  html, body, #root{
+    margin: 0;
+    min-height: 100%;
+  }
+  body{
+    background: var(--ink);
+  }
+
   html{scroll-behavior:smooth;}
 
   @keyframes navGlow{

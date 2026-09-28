@@ -303,6 +303,17 @@ const css = `
     --line: rgba(200,162,77,0.35);
   }
 
+  /* reset global — evita cantos brancos causados pela margem padrão do body */
+  *{ box-sizing: border-box; }
+  html, body, #root{
+    margin: 0;
+    height: 100%;
+  }
+  body{
+    background: var(--ink);
+    overflow: hidden; /* impede rolagem da página inteira */
+  }
+
   @keyframes fadeIn{
     from{ opacity:0; transform:translateY(10px); }
     to{ opacity:1; transform:translateY(0); }
@@ -326,17 +337,20 @@ const css = `
 
 const styles: { [key: string]: CSSProperties } = {
   body: {
-    minHeight: "100vh",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
     background: "var(--ink)",
     color: "var(--ivory)",
     fontFamily: "'Jost', sans-serif",
     fontWeight: 300,
   },
   header: {
+    flexShrink: 0,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "28px 6vw",
+    padding: "20px 6vw",
     borderBottom: "1px solid var(--line)",
   },
   logo: {
@@ -355,11 +369,13 @@ const styles: { [key: string]: CSSProperties } = {
     textDecoration: "none",
   },
   main: {
+    flex: 1,
+    minHeight: 0, // necessário para o overflow funcionar corretamente dentro do flex
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: "4rem 6vw",
-    minHeight: "calc(100vh - 90px)",
+    padding: "2rem 6vw",
+    overflowY: "auto", // rede de segurança: só rola se o conteúdo realmente não couber
   },
   quizCard: {
     maxWidth: "560px",
