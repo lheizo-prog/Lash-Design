@@ -1031,7 +1031,8 @@ const styles: { [key: string]: CSSProperties } = {
   blockquote: {
     fontFamily: "'Cormorant Garamond', serif",
     fontStyle: "italic",
-    fontSize: "clamp(1.4rem, 2.5vw, 1.9rem)",
+    maxWidth: "450px",
+    fontSize: "clamp(1.7rem, 2.5vw, 1.9rem)",
     lineHeight: 1.6,
   },
   cite: {

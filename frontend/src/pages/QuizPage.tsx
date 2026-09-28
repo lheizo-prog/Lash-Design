@@ -179,6 +179,11 @@ export default function QuizPage() {
               <h2 style={styles.resultTitle}>{result.title}</h2>
               <p style={styles.resultDesc}>{result.desc}</p>
               <div style={styles.price}>{result.price}</div>
+              <div style={styles.resultDesc}>
+                Lembrando que isso é somente uma sugestão. Para conhecer o
+                cílios que melhor reflete o seu olhar com o profissional, aperte
+                em "Agendar esse serviço".
+              </div>
               <div className="quiz-actions" style={styles.resultActions}>
                 <a
                   href={WHATSAPP_LINK}
