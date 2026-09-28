@@ -1,119 +1,199 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { CSSProperties } from "react";
+import { SERVICES } from "../data/services";
+import { SITE_CONFIG } from "../config/site";
 
-// troque pelo seu número real: 55 + DDD + número, sem espaços/traços
-const WHATSAPP_LINK = "https://wa.me/5500000000000";
+// o quiz recomenda apenas entre os estilos de extensão de cílios —
+// sobrancelhas e remoção não fazem sentido como "resultado de personalidade"
+const QUIZ_SERVICES = SERVICES.filter((s) => s.tipo === "Hyper Fio a Fio");
 
-// cada opção soma pontos para um dos 3 serviços: [Fio a Fio, Volume Russo, Lash Lifting]
-const QUESTIONS = [
+// cada opção soma pontos para os ids de serviço mais relacionados a ela.
+// ids não citados numa opção somam 0 automaticamente.
+type Points = Partial<Record<string, number>>;
+
+type Question = {
+  q: string;
+  options: { label: string; points: Points }[];
+};
+
+const QUESTIONS: Question[] = [
   {
-    q: "Como você descreveria seu estilo no dia a dia?",
+    q: "Qual vibe você quer transmitir com o olhar?",
     options: [
-      { label: "Discreto e natural", points: [2, 0, 1] },
-      { label: "Marcante, gosto de me destacar", points: [0, 2, 0] },
-      { label: "Prático, sem muita produção", points: [0, 0, 2] },
-    ],
-  },
-  {
-    q: "Qual efeito você mais gosta em fotos de referência?",
-    options: [
-      { label: "Cílios alongados, mas sutis", points: [2, 0, 0] },
-      { label: "Volume denso e dramático", points: [0, 2, 0] },
-      { label: "Cílios naturais só mais curvados", points: [0, 0, 2] },
-    ],
-  },
-  {
-    q: "Quanto tempo você tem para manutenção?",
-    options: [
-      { label: "Posso voltar a cada 2-3 semanas", points: [1, 2, 0] },
-      { label: "Prefiro algo que dure mais sem retoque", points: [1, 0, 2] },
-      { label: "Tanto faz, o que for melhor pro efeito", points: [1, 1, 1] },
-    ],
-  },
-  {
-    q: "Seus cílios naturais são...",
-    options: [
-      { label: "Curtos e retinhos", points: [1, 1, 2] },
-      { label: "Já tenho bastante fio", points: [1, 2, 0] },
-      { label: "Médios, sem nada muito marcante", points: [2, 1, 1] },
-    ],
-  },
-  {
-    q: "O que mais pesa na sua decisão?",
-    options: [
-      { label: "Parecer o mais natural possível", points: [2, 0, 1] },
-      { label: "Impacto visual, quero um olhar poderoso", points: [0, 2, 0] },
       {
-        label: "Não usar nada extra, só realçar o que já tenho",
-        points: [0, 0, 2],
+        label: "Discreta e natural",
+        points: { "hyper-classic": 2, "hyper-eyeliner": 2 },
+      },
+      {
+        label: "Elegante e refinada",
+        points: { "hyper-elite": 2, "hyper-luxo": 1 },
+      },
+      { label: "Romântica e suave", points: { "hyper-plume": 2 } },
+      {
+        label: "Ousada, quero chamar atenção",
+        points: { "hyper-fantasy": 1, "hyper-supreme": 2 },
       },
     ],
   },
   {
-    q: "Você usa maquiagem nos olhos no dia a dia?",
+    q: "Como você imagina o canto externo dos cílios?",
     options: [
-      { label: "Raramente, prefiro algo pronto", points: [1, 0, 2] },
-      { label: "Sempre capricho, gosto de make marcante", points: [0, 2, 0] },
-      { label: "Às vezes, depende da ocasião", points: [2, 1, 0] },
+      {
+        label: "Igual do início ao fim, sem efeito",
+        points: { "hyper-classic": 2, "hyper-elite": 1 },
+      },
+      { label: "Levemente puxado pra cima", points: { "hyper-fox": 2 } },
+      {
+        label: "Bem alongado, tipo 'gatinho'",
+        points: { "hyper-cisne-negro": 2 },
+      },
+      {
+        label: "Alternado, com fios de tamanhos diferentes",
+        points: { "hyper-californiano": 2 },
+      },
     ],
   },
   {
-    q: "Como é sua rotina de cuidados?",
+    q: "Qual nível de volume você prefere?",
     options: [
-      { label: "Gosto de algo de baixa manutenção", points: [1, 0, 2] },
       {
-        label: "Não me importo de cuidar bem se o resultado vale a pena",
-        points: [1, 2, 0],
+        label: "O mínimo possível",
+        points: { "hyper-classic": 2, "hyper-eyeliner": 2 },
       },
-      { label: "Prefiro o mínimo de produtos possível", points: [1, 0, 2] },
+      {
+        label: "Um volume médio, nem muito nem pouco",
+        points: { "hyper-elite": 1, "hyper-plume": 1 },
+      },
+      {
+        label: "Bastante volume, quero um olhar denso",
+        points: { "hyper-luxo": 2, "hyper-supreme": 1 },
+      },
+      { label: "O máximo que existir", points: { "hyper-supreme": 2 } },
+    ],
+  },
+  {
+    q: "Você toparia cílios coloridos ou com brilho?",
+    options: [
+      {
+        label: "De jeito nenhum, só clássico",
+        points: { "hyper-classic": 1, "hyper-eyeliner": 1 },
+      },
+      {
+        label: "Talvez, em uma ocasião especial",
+        points: { "hyper-fantasy": 1 },
+      },
+      { label: "Sim! Adoro inovar", points: { "hyper-fantasy": 2 } },
     ],
   },
   {
     q: "Para qual ocasião é esse cílios?",
     options: [
-      { label: "Uso no dia a dia, discreto", points: [2, 0, 1] },
       {
-        label: "Quero para um evento especial, algo marcante",
-        points: [0, 2, 0],
+        label: "Uso no dia a dia",
+        points: { "hyper-classic": 2, "hyper-eyeliner": 1 },
       },
       {
-        label: "Só quero acordar com os olhos já 'prontos'",
-        points: [0, 0, 2],
+        label: "Trabalho, ambiente mais formal",
+        points: { "hyper-elite": 2, "hyper-luxo": 1 },
       },
+      {
+        label: "Praia, viagem, estilo despojado",
+        points: { "hyper-californiano": 2 },
+      },
+      {
+        label: "Um evento especial (festa, casamento)",
+        points: { "hyper-supreme": 1, "hyper-cisne-negro": 1, "hyper-luxo": 1 },
+      },
+    ],
+  },
+  {
+    q: "Quanto tempo você quer investir em manutenção?",
+    options: [
+      {
+        label: "O mínimo possível",
+        points: { "hyper-classic": 2, "hyper-eyeliner": 2 },
+      },
+      {
+        label: "Não me importo de cuidar bem se o efeito valer a pena",
+        points: { "hyper-luxo": 1, "hyper-supreme": 2 },
+      },
+    ],
+  },
+  {
+    q: "O que você mais busca no formato do seu olhar?",
+    options: [
+      {
+        label: "Alongar o olho",
+        points: { "hyper-cisne-negro": 2, "hyper-fox": 1 },
+      },
+      { label: "Levantar o canto externo", points: { "hyper-fox": 2 } },
+      { label: "Suavizar e arredondar", points: { "hyper-plume": 2 } },
+      {
+        label: "Só realçar o que já tenho, sem mudar o formato",
+        points: { "hyper-classic": 2, "hyper-eyeliner": 1 },
+      },
+    ],
+  },
+  {
+    q: "Como é sua relação com maquiagem nos olhos?",
+    options: [
+      {
+        label: "Quase nunca uso, prefiro algo pronto",
+        points: { "hyper-eyeliner": 2, "hyper-classic": 1 },
+      },
+      {
+        label: "Sempre capricho, gosto de um efeito marcante",
+        points: { "hyper-luxo": 1, "hyper-fantasy": 1 },
+      },
+      {
+        label: "Depende do dia",
+        points: { "hyper-elite": 1, "hyper-plume": 1 },
+      },
+    ],
+  },
+  {
+    q: "Qual palavra combina mais com você?",
+    options: [
+      { label: "Minimalista", points: { "hyper-classic": 2 } },
+      { label: "Glamourosa", points: { "hyper-luxo": 2 } },
+      { label: "Criativa", points: { "hyper-fantasy": 2 } },
+      { label: "Despojada", points: { "hyper-californiano": 2 } },
+    ],
+  },
+  {
+    q: "Se seu olhar fizesse uma declaração, qual seria?",
+    options: [
+      {
+        label: '"Discreto, mas impecável"',
+        points: { "hyper-eyeliner": 2, "hyper-classic": 1 },
+      },
+      {
+        label: '"Sofisticado e denso"',
+        points: { "hyper-supreme": 2, "hyper-luxo": 1 },
+      },
+      {
+        label: '"Alongado e felino"',
+        points: { "hyper-cisne-negro": 2, "hyper-fox": 1 },
+      },
+      { label: '"Leve como uma pluma"', points: { "hyper-plume": 2 } },
     ],
   },
 ];
 
-const RESULTS = [
-  {
-    title: "Fio a Fio",
-    desc: "Seu estilo pede um efeito natural, alongado e discreto — perfeito para quem quer realçar o olhar sem parecer que fez algo. É o clássico que nunca sai de moda.",
-    image: "https://picsum.photos/seed/lash-fio-a-fio/700/900",
-    price: "a partir de R$ 120",
-  },
-  {
-    title: "Volume Russo",
-    desc: "Você gosta de impacto! O volume russo cria densidade e um olhar marcante, ideal para quem não tem medo de se destacar.",
-    image: "https://picsum.photos/seed/lash-volume-russo/700/900",
-    price: "a partir de R$ 180",
-  },
-  {
-    title: "Lash Lifting",
-    desc: "Praticidade é a sua prioridade. O lash lifting realça seus cílios naturais com curvatura e nutrição, sem adicionar fios — acorda pronta.",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-    price: "a partir de R$ 90",
-  },
-];
-
 export default function QuizPage() {
-  const [step, setStep] = useState(0); // índice da pergunta atual
-  const [scores, setScores] = useState([0, 0, 0]);
+  const [step, setStep] = useState(0);
+  const [scores, setScores] = useState<Record<string, number>>({});
   const [finished, setFinished] = useState(false);
 
-  function handleAnswer(points: number[]) {
-    const newScores = scores.map((s, i) => s + points[i]);
-    setScores(newScores);
+  function handleAnswer(points: Points) {
+    setScores((prev) => {
+      const next = { ...prev };
+      for (const id of Object.keys(points)) {
+        next[id] = (next[id] || 0) + (points[id] || 0);
+      }
+      return next;
+    });
 
     if (step + 1 < QUESTIONS.length) {
       setStep(step + 1);
@@ -124,13 +204,21 @@ export default function QuizPage() {
 
   function restart() {
     setStep(0);
-    setScores([0, 0, 0]);
+    setScores({});
     setFinished(false);
   }
 
-  const resultIndex = scores.indexOf(Math.max(...scores));
-  const result = RESULTS[resultIndex];
-  const progress = Math.round((step / QUESTIONS.length) * 100);
+  // em caso de empate, prevalece o serviço que aparece primeiro no catálogo
+  // (regra de desempate explícita, não é acidental)
+  const result = QUIZ_SERVICES.reduce((best, current) => {
+    const bestScore = scores[best.id] || 0;
+    const currentScore = scores[current.id] || 0;
+    return currentScore > bestScore ? current : best;
+  }, QUIZ_SERVICES[0]);
+
+  const progress = Math.round(
+    ((step + (finished ? 1 : 0)) / QUESTIONS.length) * 100,
+  );
 
   return (
     <div style={styles.body}>
@@ -138,7 +226,7 @@ export default function QuizPage() {
 
       <header className="quiz-header" style={styles.header}>
         <Link to="/" style={styles.logo}>
-          Cílios <span style={{ color: "var(--gold)" }}>&amp;</span> Cia
+          {SITE_CONFIG.brandName}
         </Link>
         <Link to="/" style={styles.backLink}>
           ← voltar ao site
@@ -179,14 +267,9 @@ export default function QuizPage() {
               <h2 style={styles.resultTitle}>{result.title}</h2>
               <p style={styles.resultDesc}>{result.desc}</p>
               <div style={styles.price}>{result.price}</div>
-              <div style={styles.resultDesc}>
-                Lembrando que isso é somente uma sugestão. Para conhecer o
-                cílios que melhor reflete o seu olhar com o profissional, aperte
-                em "Agendar esse serviço".
-              </div>
               <div className="quiz-actions" style={styles.resultActions}>
                 <a
-                  href={WHATSAPP_LINK}
+                  href={SITE_CONFIG.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ ...styles.btn, ...styles.btnSolid }}
@@ -237,7 +320,7 @@ const css = `
     .quiz-header{ padding: 20px 6vw !important; }
     .quiz-main{ padding: 2.5rem 6vw !important; }
     .quiz-actions{ flex-direction: column !important; }
-    .quiz-actions a, .quiz-actions button{ width: 70% !important; text-align: center !important; }
+    .quiz-actions a, .quiz-actions button{ width: 100% !important; text-align: center !important; }
   }
 `;
 

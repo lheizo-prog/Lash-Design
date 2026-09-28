@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { CSSProperties } from "react";
-
-// troque pelo seu número real: 55 + DDD + número, sem espaços/traços
-const WHATSAPP_LINK = "https://wa.me/5513996844270";
+import { SERVICES as ALL_SERVICES, type Service } from "../data/services";
+import { SITE_CONFIG } from "../config/site";
 
 const NAV_ITEMS = [
   { id: "sobre", label: "Sobre" },
@@ -13,112 +12,8 @@ const NAV_ITEMS = [
   { id: "contato", label: "Agendar" },
 ];
 
-const SERVICES = [
-  {
-    num: "01",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Classic",
-    desc: "Aplicação clássica, um fio sintético por cílio natural, para um efeito natural e alongado.",
-    price: "a partir de R$ 197,00",
-    image: "https://picsum.photos/seed/lash-fio-a-fio/700/900",
-  },
-  {
-    num: "02",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Elite",
-    desc: "Leques de fios ultrafinos aplicados por cílio, criando densidade e um olhar marcante.",
-    price: "a partir de R$ 227,00",
-    image: "https://picsum.photos/seed/lash-volume-russo/700/900",
-  },
-  {
-    num: "03",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Plume",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 247,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "04",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Luxo",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 267,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "05",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Fantasy",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 280,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "06",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Supreme",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 287,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "07",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Californiano",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 257,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "08",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Cisne Negro",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 357,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "09",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Hyper Fox",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 297,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "10",
-    tipo: "Hyper Fio a Fio",
-    title: "Hyper Eyeliner",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 287,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "11",
-    tipo: "Sobrancelhas",
-    title: "Designer com Tintura",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 80,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "12",
-    tipo: "Sobrancelhas",
-    title: "Designer de sobrancelhas",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 50,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-  {
-    num: "13",
-    tipo: "Outros",
-    title: "Remoçaõ de Cílios",
-    desc: "Curvatura e nutrição dos cílios naturais, com efeito de máscara por até 6 semanas.",
-    price: "a partir de R$ 70,00",
-    image: "https://picsum.photos/seed/lash-lifting/700/900",
-  },
-];
+// catálogo importado de ../data/services — fonte única compartilhada com o quiz
+const SERVICES = ALL_SERVICES;
 
 const TESTIMONIALS = [
   {
@@ -168,13 +63,7 @@ export default function LashDesignSite() {
   const [serviceIndex, setServiceIndex] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   // guarda qual serviço está aberto no popup (null = fechado)
-  const [openService, setOpenService] = useState<{
-    num: string;
-    title: string;
-    desc: string;
-    price: string;
-    image: string;
-  } | null>(null);
+  const [openService, setOpenService] = useState<Service | null>(null);
 
   function nextService() {
     setServiceIndex((i) => (i + 1) % SERVICES.length);
@@ -215,10 +104,7 @@ export default function LashDesignSite() {
       <style>{css}</style>
 
       <header style={styles.header}>
-        <div style={styles.logo}>
-          Luciana <span style={{ color: "var(--gold)" }}>&amp;</span>{" "}
-          Lash-Designer
-        </div>
+        <div style={styles.logo}>{SITE_CONFIG.brandName}</div>
 
         <button
           className="hamburger-btn"
@@ -257,7 +143,7 @@ export default function LashDesignSite() {
       </header>
 
       <section style={styles.hero}>
-        <div style={styles.eyebrow}>Studio Hikari</div>
+        <div style={styles.eyebrow}>{SITE_CONFIG.studioName}</div>
         <h1 style={styles.h1}>
           Olhares que <em style={{ color: "var(--gold-soft)" }}>contam</em>
           <br />
@@ -496,10 +382,10 @@ export default function LashDesignSite() {
           <br />o seu olhar
         </h2>
         <p style={{ color: "var(--muted)", marginBottom: "2.5rem" }}>
-          Atendimento com hora marcada, de terça a sábado.
+          {SITE_CONFIG.attendanceNote} {SITE_CONFIG.hoursLabel}.
         </p>
         <a
-          href={WHATSAPP_LINK}
+          href={SITE_CONFIG.whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
           style={{ ...styles.btn, ...styles.btnSolid }}
@@ -507,14 +393,14 @@ export default function LashDesignSite() {
           Falar no WhatsApp
         </a>
         <div style={styles.footerMeta}>
-          <span>Luciana | Lash-Designer</span>
-          <span>Seg-Sáb · 9h às 19h</span>
+          <span>{SITE_CONFIG.brandName}</span>
+          <span>{SITE_CONFIG.hoursLabel}</span>
           <span>&copy; 2026</span>
         </div>
       </footer>
 
       <a
-        href={WHATSAPP_LINK}
+        href={SITE_CONFIG.whatsappLink}
         target="_blank"
         rel="noopener noreferrer"
         style={styles.whatsappFloat}
@@ -551,7 +437,7 @@ export default function LashDesignSite() {
               <p style={styles.serviceDesc}>{openService.desc}</p>
               <div style={styles.price}>{openService.price}</div>
               <a
-                href={WHATSAPP_LINK}
+                href={SITE_CONFIG.whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
